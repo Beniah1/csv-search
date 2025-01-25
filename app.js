@@ -3,6 +3,19 @@ const supabaseUrl = 'https://znuxahdqxencqtsvxvja.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpudXhhaGRxeGVuY3F0c3Z4dmphIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzc4MDQzNjUsImV4cCI6MjA1MzM4MDM2NX0.8evCXHMfkn1yhsVB8lQ62BL3b6-j4KZ_oszTuYLT6G0';
 const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
+// Show toast notification
+function showToast(message) {
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    
+    // Remove toast after animation
+    setTimeout(() => {
+        toast.remove();
+    }, 2000);
+}
+
 // Search function
 async function searchRecords(searchTerm) {
     console.log('Searching for:', searchTerm);
@@ -40,11 +53,14 @@ function openEditModal(record) {
     document.getElementById('edit26th').value = record.attendance_26th || '';
     
     modal.style.display = 'block';
+    document.body.style.overflow = 'hidden'; // Prevent background scrolling
+    showToast('Editing record...');
 }
 
 function closeEditModal() {
     const modal = document.getElementById('editModal');
     modal.style.display = 'none';
+    document.body.style.overflow = ''; // Restore scrolling
     currentRecord = null;
 }
 
@@ -180,11 +196,8 @@ document.getElementById('editForm').addEventListener('submit', async (e) => {
         // Close modal only after we confirm the update
         closeEditModal();
         
-        // Show success message
-        const message = document.createElement('div');
-        message.className = 'message success';
-        message.textContent = 'Record updated successfully!';
-        resultsDiv.insertBefore(message, resultsDiv.firstChild);
+        // Show toast message
+        showToast('Record updated successfully!');
         
         // Refresh the search results
         const searchTerm = document.getElementById('searchInput').value.trim();
@@ -193,22 +206,12 @@ document.getElementById('editForm').addEventListener('submit', async (e) => {
             const results = await searchRecords(searchTerm);
             displayResults(results);
         }
-        
-        // Remove message after 3 seconds
-        setTimeout(() => message.remove(), 3000);
     } catch (error) {
         console.error('Error in form submission:', error);
         
         // Close modal on error
         closeEditModal();
-        
-        // Show error message with more details
-        const message = document.createElement('div');
-        message.className = 'message error';
-        message.textContent = `Error updating record: ${error.message}`;
-        resultsDiv.insertBefore(message, resultsDiv.firstChild);
-        
-        setTimeout(() => message.remove(), 5000);
+        showToast(`Error: ${error.message}`);
     } finally {
         // Reset button state
         submitBtn.textContent = originalText;
@@ -245,10 +248,6 @@ document.getElementById('searchInput').addEventListener('keypress', async (e) =>
     }
 });
 
-// Initialize search input and edit modal
-document.getElementById('searchInput').disabled = false;
-document.getElementById('searchBtn').disabled = false;
-
 // Create record in Supabase
 async function createRecord(data) {
     console.log('Creating new record. Data:', data);
@@ -276,6 +275,8 @@ async function createRecord(data) {
 function openCreateModal() {
     const modal = document.getElementById('createModal');
     modal.style.display = 'block';
+    document.body.style.overflow = 'hidden'; // Prevent background scrolling
+    showToast('Creating new record...');
     
     // Clear form fields
     document.getElementById('newFullName').value = '';
@@ -290,6 +291,7 @@ function openCreateModal() {
 function closeCreateModal() {
     const modal = document.getElementById('createModal');
     modal.style.display = 'none';
+    document.body.style.overflow = ''; // Restore scrolling
 }
 
 // Handle create form submission
@@ -324,14 +326,8 @@ document.getElementById('createForm').addEventListener('submit', async (e) => {
         // Close modal
         closeCreateModal();
         
-        // Show success message
-        const message = document.createElement('div');
-        message.className = 'message success';
-        message.textContent = 'Record created successfully!';
-        resultsDiv.insertBefore(message, resultsDiv.firstChild);
-        
-        // Remove message after 3 seconds
-        setTimeout(() => message.remove(), 3000);
+        // Show toast message
+        showToast('Record created successfully!');
         
         // Refresh the search results to show the new record
         const searchTerm = document.getElementById('searchInput').value.trim();
@@ -341,14 +337,8 @@ document.getElementById('createForm').addEventListener('submit', async (e) => {
         }
     } catch (error) {
         console.error('Error in create form submission:', error);
-        
-        // Show error message
-        const message = document.createElement('div');
-        message.className = 'message error';
-        message.textContent = `Error creating record: ${error.message}`;
-        resultsDiv.insertBefore(message, resultsDiv.firstChild);
-        
-        setTimeout(() => message.remove(), 5000);
+        closeCreateModal();
+        showToast(`Error: ${error.message}`);
     } finally {
         // Reset button state
         submitBtn.textContent = originalText;
@@ -370,6 +360,16 @@ window.onclick = function(event) {
         closeCreateModal();
     }
 }
+
+// Prevent scrolling when modal is open
+document.addEventListener('DOMContentLoaded', () => {
+    const modals = document.querySelectorAll('.modal');
+    modals.forEach(modal => {
+        modal.addEventListener('touchmove', e => {
+            e.preventDefault();
+        }, { passive: false });
+    });
+});
 
 // Test database connection and log details
 (async () => {
