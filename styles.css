@@ -213,6 +213,38 @@ button:hover {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+.close-btn {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    font-size: 20px;
+    line-height: 1;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+}
+
+.close-btn:hover {
+    background-color: #e9ecef;
+    color: #333;
+}
+
+@media (max-width: 480px) {
+    .close-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 24px;
+    }
+}
+
 .form-group {
     margin-bottom: 20px;
 }
@@ -298,29 +330,119 @@ button:hover {
     border: 1px solid #f5c6cb;
 }
 
-@media (max-width: 600px) {
+/* Tablet Styles */
+@media (max-width: 768px) {
     .container {
+        width: 95%;
+        margin: 10px auto;
+    }
+
+    .result-item ul {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .modal-content {
+        width: 90%;
+        max-width: none;
+        margin: 20px auto;
+    }
+
+    .add-btn {
+        max-width: none;
+        margin: 15px auto;
+    }
+
+    input[type="text"],
+    select,
+    button {
+        font-size: 16px; /* Prevents iOS zoom */
+        padding: 12px;
+    }
+}
+
+/* Mobile Styles */
+@media (max-width: 480px) {
+    body {
         padding: 10px;
     }
+
+    .container {
+        padding: 10px;
+        margin: 0;
+        border-radius: 0;
+        box-shadow: none;
+    }
     
-    .upload-section, .search-section, .results-section, .instructions {
+    .search-section, .results-section, .instructions {
         padding: 15px;
+        margin-bottom: 15px;
     }
     
     button {
         width: 100%;
+        padding: 15px;
+        margin-bottom: 10px;
     }
 
     .modal-content {
-        margin: 10px;
+        margin: 0;
         padding: 15px;
+        height: 100%;
+        border-radius: 0;
+        max-height: 100vh;
     }
 
     .attendance-inputs {
         grid-template-columns: 1fr;
+        gap: 10px;
     }
 
     .form-buttons {
         flex-direction: column;
+        gap: 10px;
+    }
+
+    .result-item {
+        padding: 15px;
+        margin-bottom: 15px;
+    }
+
+    .result-item ul {
+        grid-template-columns: 1fr;
+    }
+
+    h1 {
+        font-size: 1.5em;
+    }
+
+    h2 {
+        font-size: 1.2em;
+    }
+
+    .instructions p {
+        font-size: 0.95em;
+    }
+
+    .edit-btn {
+        margin-top: 15px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .attendance-status {
+        padding: 5px 10px;
+    }
+}
+
+/* Large Screen Styles */
+@media (min-width: 1200px) {
+    .container {
+        max-width: 1000px;
+    }
+
+    .result-item ul {
+        grid-template-columns: repeat(4, 1fr);
     }
 }
