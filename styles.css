@@ -255,6 +255,14 @@ button:hover {
     margin-top: 20px;
 }
 
+.add-btn {
+    background-color: #28a745;
+    margin-top: 15px;
+    width: 100%;
+    max-width: 200px;
+    display: block;
+}
+
 .save-btn {
     background-color: #4CAF50;
 }

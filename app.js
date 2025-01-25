@@ -30,14 +30,14 @@ function openEditModal(record) {
     currentRecord = record;
     const modal = document.getElementById('editModal');
     
-    // Populate form fields
+    // Populate form fields with correct column names
     document.getElementById('editFullName').value = record.full_name;
     document.getElementById('editGender').value = record.gender;
     document.getElementById('editPhone').value = record.phone_number;
-    document.getElementById('edit5th').value = record['5th'] || '';
-    document.getElementById('edit12th').value = record['12th'] || '';
-    document.getElementById('edit19th').value = record['19th'] || '';
-    document.getElementById('edit26th').value = record['26th'] || '';
+    document.getElementById('edit5th').value = record.attendance_5th || '';
+    document.getElementById('edit12th').value = record.attendance_12th || '';
+    document.getElementById('edit19th').value = record.attendance_19th || '';
+    document.getElementById('edit26th').value = record.attendance_26th || '';
     
     modal.style.display = 'block';
 }
@@ -53,18 +53,49 @@ async function updateRecord(id, data) {
     console.log('Updating record. ID:', id, 'Data:', data);
     
     try {
-        const { data: result, error } = await supabase
+        // First verify the record exists
+        const { data: existing, error: fetchError } = await supabase
             .from('csv_data')
-            .update(data)
+            .select('*')
+            .eq('id', id)
+            .single();
+
+        if (fetchError) {
+            console.error('Error fetching record:', fetchError);
+            throw new Error('Could not find record to update');
+        }
+
+        if (!existing) {
+            throw new Error(`No record found with ID ${id}`);
+        }
+
+        console.log('Existing record:', existing);
+
+        // Perform the update
+        const { data: result, error: updateError } = await supabase
+            .from('csv_data')
+            .update({
+                full_name: data.full_name,
+                gender: data.gender,
+                phone_number: data.phone_number,
+                attendance_5th: data.attendance_5th,
+                attendance_12th: data.attendance_12th,
+                attendance_19th: data.attendance_19th,
+                attendance_26th: data.attendance_26th
+            })
             .eq('id', id)
             .select();
 
-        if (error) {
-            console.error('Supabase update error:', error);
-            throw new Error(error.message);
+        if (updateError) {
+            console.error('Supabase update error:', updateError);
+            throw new Error(updateError.message);
         }
 
-        console.log('Update result:', result);
+        if (!result || result.length === 0) {
+            throw new Error('Update succeeded but no data was returned');
+        }
+
+        console.log('Update successful. New data:', result);
         return result;
     } catch (error) {
         console.error('Error in updateRecord:', error);
@@ -86,17 +117,17 @@ function displayResults(results) {
         const resultItem = document.createElement('div');
         resultItem.className = 'result-item';
         
-        // Create content with proper formatting
+        // Create content with proper column names
         const content = `
             <h3>${record.full_name}</h3>
             <p><strong>Gender:</strong> ${record.gender}</p>
             <p><strong>Phone:</strong> ${record.phone_number}</p>
             <p><strong>Attendance:</strong></p>
             <ul>
-                <li>5th: <span class="attendance-status ${record['5th']?.toLowerCase() || ''}">${record['5th'] || 'Not Set'}</span></li>
-                <li>12th: <span class="attendance-status ${record['12th']?.toLowerCase() || ''}">${record['12th'] || 'Not Set'}</span></li>
-                <li>19th: <span class="attendance-status ${record['19th']?.toLowerCase() || ''}">${record['19th'] || 'Not Set'}</span></li>
-                <li>26th: <span class="attendance-status ${record['26th']?.toLowerCase() || ''}">${record['26th'] || 'Not Set'}</span></li>
+                <li>5th: <span class="attendance-status ${record.attendance_5th || ''}">${record.attendance_5th || 'Not Set'}</span></li>
+                <li>12th: <span class="attendance-status ${record.attendance_12th || ''}">${record.attendance_12th || 'Not Set'}</span></li>
+                <li>19th: <span class="attendance-status ${record.attendance_19th || ''}">${record.attendance_19th || 'Not Set'}</span></li>
+                <li>26th: <span class="attendance-status ${record.attendance_26th || ''}">${record.attendance_26th || 'Not Set'}</span></li>
             </ul>
             <button onclick="openEditModal(${JSON.stringify(record).replace(/"/g, '&quot;')})" class="edit-btn">Edit</button>
         `;
@@ -121,15 +152,15 @@ document.getElementById('editForm').addEventListener('submit', async (e) => {
     const originalText = submitBtn.textContent;
     const resultsDiv = document.getElementById('searchResults');
     
-    // Create update data
+    // Create update data with correct column names
     const updateData = {
         full_name: document.getElementById('editFullName').value,
         gender: document.getElementById('editGender').value,
         phone_number: document.getElementById('editPhone').value,
-        '5th': document.getElementById('edit5th').value,
-        '12th': document.getElementById('edit12th').value,
-        '19th': document.getElementById('edit19th').value,
-        '26th': document.getElementById('edit26th').value
+        attendance_5th: document.getElementById('edit5th').value,
+        attendance_12th: document.getElementById('edit12th').value,
+        attendance_19th: document.getElementById('edit19th').value,
+        attendance_26th: document.getElementById('edit26th').value
     };
     
     console.log('Update data prepared:', updateData);
@@ -139,10 +170,14 @@ document.getElementById('editForm').addEventListener('submit', async (e) => {
     submitBtn.disabled = true;
 
     try {
-        await updateRecord(currentRecord.id, updateData);
-        console.log('Update successful');
+        const result = await updateRecord(currentRecord.id, updateData);
+        console.log('Update successful:', result);
+
+        if (!result) {
+            throw new Error('No response from update operation');
+        }
         
-        // Close modal first
+        // Close modal only after we confirm the update
         closeEditModal();
         
         // Show success message
@@ -214,11 +249,125 @@ document.getElementById('searchInput').addEventListener('keypress', async (e) =>
 document.getElementById('searchInput').disabled = false;
 document.getElementById('searchBtn').disabled = false;
 
-// Close modal when clicking outside
+// Create record in Supabase
+async function createRecord(data) {
+    console.log('Creating new record. Data:', data);
+    
+    try {
+        const { data: result, error } = await supabase
+            .from('csv_data')
+            .insert(data)
+            .select();
+
+        if (error) {
+            console.error('Supabase create error:', error);
+            throw new Error(error.message);
+        }
+
+        console.log('Create result:', result);
+        return result;
+    } catch (error) {
+        console.error('Error in createRecord:', error);
+        throw error;
+    }
+}
+
+// Modal functions for create
+function openCreateModal() {
+    const modal = document.getElementById('createModal');
+    modal.style.display = 'block';
+    
+    // Clear form fields
+    document.getElementById('newFullName').value = '';
+    document.getElementById('newGender').value = '';
+    document.getElementById('newPhone').value = '';
+    document.getElementById('new5th').value = '';
+    document.getElementById('new12th').value = '';
+    document.getElementById('new19th').value = '';
+    document.getElementById('new26th').value = '';
+}
+
+function closeCreateModal() {
+    const modal = document.getElementById('createModal');
+    modal.style.display = 'none';
+}
+
+// Handle create form submission
+document.getElementById('createForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const submitBtn = e.target.querySelector('button[type="submit"]');
+    const originalText = submitBtn.textContent;
+    const resultsDiv = document.getElementById('searchResults');
+    
+    // Create new record data
+    const newData = {
+        full_name: document.getElementById('newFullName').value,
+        gender: document.getElementById('newGender').value,
+        phone_number: document.getElementById('newPhone').value,
+        attendance_5th: document.getElementById('new5th').value,
+        attendance_12th: document.getElementById('new12th').value,
+        attendance_19th: document.getElementById('new19th').value,
+        attendance_26th: document.getElementById('new26th').value
+    };
+    
+    console.log('New record data prepared:', newData);
+    
+    // Show loading state
+    submitBtn.textContent = 'Creating...';
+    submitBtn.disabled = true;
+
+    try {
+        const result = await createRecord(newData);
+        console.log('Create successful:', result);
+        
+        // Close modal
+        closeCreateModal();
+        
+        // Show success message
+        const message = document.createElement('div');
+        message.className = 'message success';
+        message.textContent = 'Record created successfully!';
+        resultsDiv.insertBefore(message, resultsDiv.firstChild);
+        
+        // Remove message after 3 seconds
+        setTimeout(() => message.remove(), 3000);
+        
+        // Refresh the search results to show the new record
+        const searchTerm = document.getElementById('searchInput').value.trim();
+        if (searchTerm) {
+            const results = await searchRecords(searchTerm);
+            displayResults(results);
+        }
+    } catch (error) {
+        console.error('Error in create form submission:', error);
+        
+        // Show error message
+        const message = document.createElement('div');
+        message.className = 'message error';
+        message.textContent = `Error creating record: ${error.message}`;
+        resultsDiv.insertBefore(message, resultsDiv.firstChild);
+        
+        setTimeout(() => message.remove(), 5000);
+    } finally {
+        // Reset button state
+        submitBtn.textContent = originalText;
+        submitBtn.disabled = false;
+    }
+});
+
+// Add event listener for Add New button
+document.getElementById('addNewBtn').addEventListener('click', openCreateModal);
+
+// Close modals when clicking outside
 window.onclick = function(event) {
-    const modal = document.getElementById('editModal');
-    if (event.target == modal) {
+    const editModal = document.getElementById('editModal');
+    const createModal = document.getElementById('createModal');
+    
+    if (event.target == editModal) {
         closeEditModal();
+    } else if (event.target == createModal) {
+        closeCreateModal();
     }
 }
 
@@ -227,11 +376,12 @@ window.onclick = function(event) {
     try {
         const { data, error } = await supabase
             .from('csv_data')
-            .select('count()', { count: 'exact' });
+            .select('*')
+            .limit(1);
             
         if (error) throw error;
         console.log('Database connection successful');
-        console.log('Total records:', data[0].count);
+        console.log('Connection test record:', data);
     } catch (error) {
         console.error('Database connection error:', error);
         document.getElementById('searchResults').innerHTML = 

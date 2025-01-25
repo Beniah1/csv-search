@@ -78,6 +78,73 @@
         <div class="instructions">
             <h2>How to Use</h2>
             <p>Enter a name or any information in the search box below to find matching records.</p>
+            <button id="addNewBtn" class="add-btn">Add New Record</button>
+        </div>
+
+        <!-- Create Record Modal -->
+        <div id="createModal" class="modal">
+            <div class="modal-content">
+                <h2>Add New Record</h2>
+                <form id="createForm">
+                    <div class="form-group">
+                        <label for="newFullName">Full Name:</label>
+                        <input type="text" id="newFullName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="newGender">Gender:</label>
+                        <select id="newGender" required>
+                            <option value="">Select...</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="newPhone">Phone Number:</label>
+                        <input type="text" id="newPhone" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Attendance:</label>
+                        <div class="attendance-inputs">
+                            <div>
+                                <label for="new5th">5th:</label>
+                                <select id="new5th">
+                                    <option value="">Select...</option>
+                                    <option value="PRESENT">Present</option>
+                                    <option value="ABSENT">Absent</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="new12th">12th:</label>
+                                <select id="new12th">
+                                    <option value="">Select...</option>
+                                    <option value="PRESENT">Present</option>
+                                    <option value="ABSENT">Absent</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="new19th">19th:</label>
+                                <select id="new19th">
+                                    <option value="">Select...</option>
+                                    <option value="PRESENT">Present</option>
+                                    <option value="ABSENT">Absent</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="new26th">26th:</label>
+                                <select id="new26th">
+                                    <option value="">Select...</option>
+                                    <option value="PRESENT">Present</option>
+                                    <option value="ABSENT">Absent</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-buttons">
+                        <button type="submit" class="save-btn">Create Record</button>
+                        <button type="button" class="cancel-btn" onclick="closeCreateModal()">Cancel</button>
+                    </div>
+                </form>
+            </div>
         </div>
 
         <!-- Search Section -->
