@@ -30,7 +30,7 @@ body {
 .container {
   max-width: 800px;
   margin: 0 auto;
-  background-color: white;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.4));
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -38,7 +38,7 @@ body {
 
 h1 {
   text-align: center;
-  color: #333;
+  color: #ffffff;
   margin-bottom: 30px;
 }
 
@@ -84,6 +84,8 @@ h2 {
 .results-section {
   margin-bottom: 30px;
   padding: 20px;
+  background-color: #fff;
+
   border: 1px solid #ddd;
   border-radius: 4px;
 }
@@ -532,6 +534,7 @@ button:hover {
   .search-section,
   .results-section,
   .instructions {
+    
     padding: 15px;
     margin-bottom: 15px;
   }
