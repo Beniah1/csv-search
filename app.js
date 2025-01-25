@@ -151,7 +151,10 @@ function displayResults(results) {
                 <li>19th: <span class="attendance-status ${record.attendance_19th || ''}">${record.attendance_19th || 'Not Set'}</span></li>
                 <li>26th: <span class="attendance-status ${record.attendance_26th || ''}">${record.attendance_26th || 'Not Set'}</span></li>
             </ul>
-            <button onclick="openEditModal(${JSON.stringify(record).replace(/"/g, '&quot;')})" class="edit-btn">Edit</button>
+            <div class="button-group">
+                <button onclick="openEditModal(${JSON.stringify(record).replace(/"/g, '&quot;')})" class="edit-btn">Edit</button>
+                <button onclick="handleDelete(${record.id})" class="delete-btn">Delete</button>
+            </div>
         `;
         
         resultItem.innerHTML = content;
@@ -175,6 +178,7 @@ document.getElementById('editForm').addEventListener('submit', async (e) => {
     const resultsDiv = document.getElementById('searchResults');
     
     // Create update data with correct column names
+    const ageValue = document.getElementById('editAge').value;
     const updateData = {
         full_name: document.getElementById('editFullName').value,
         gender: document.getElementById('editGender').value,
@@ -183,9 +187,15 @@ document.getElementById('editForm').addEventListener('submit', async (e) => {
         attendance_12th: document.getElementById('edit12th').value,
         attendance_19th: document.getElementById('edit19th').value,
         attendance_26th: document.getElementById('edit26th').value,
-        age: document.getElementById('editAge').value,
+        age: ageValue ? parseInt(ageValue) : null,
         current_level: document.getElementById('editCurrentLevel').value
     };
+
+    // Validate data before sending
+    if (!updateData.full_name || !updateData.gender || !updateData.phone_number) {
+        showToast('Please fill in all required fields');
+        return;
+    }
     
     console.log('Update data prepared:', updateData);
     
@@ -261,17 +271,35 @@ async function createRecord(data) {
     console.log('Creating new record. Data:', data);
     
     try {
+        // First verify table exists and is accessible
+        const { data: test, error: testError } = await supabase
+            .from('csv_data_january')
+            .select('*')
+            .limit(1);
+
+        if (testError) {
+            console.error('Table access error:', testError);
+            throw new Error(`Table access error: ${testError.message}`);
+        }
+
+        console.log('Table access successful');
+
+        // Attempt to create the record
         const { data: result, error } = await supabase
             .from('csv_data_january')
-            .insert(data)
+            .insert([data]) // Explicitly wrap data in array
             .select();
 
         if (error) {
             console.error('Supabase create error:', error);
-            throw new Error(error.message);
+            throw new Error(`Create error: ${error.message}`);
         }
 
-        console.log('Create result:', result);
+        if (!result || result.length === 0) {
+            throw new Error('No result returned after insert');
+        }
+
+        console.log('Create successful. Result:', result);
         return result;
     } catch (error) {
         console.error('Error in createRecord:', error);
@@ -313,6 +341,7 @@ document.getElementById('createForm').addEventListener('submit', async (e) => {
     const resultsDiv = document.getElementById('searchResults');
     
     // Create new record data
+    const ageValue = document.getElementById('newAge').value;
     const newData = {
         full_name: document.getElementById('newFullName').value,
         gender: document.getElementById('newGender').value,
@@ -321,9 +350,15 @@ document.getElementById('createForm').addEventListener('submit', async (e) => {
         attendance_12th: document.getElementById('new12th').value,
         attendance_19th: document.getElementById('new19th').value,
         attendance_26th: document.getElementById('new26th').value,
-        age: document.getElementById('newAge').value,
+        age: ageValue ? parseInt(ageValue) : null,
         current_level: document.getElementById('newCurrentLevel').value
     };
+
+    // Validate data before sending
+    if (!newData.full_name || !newData.gender || !newData.phone_number) {
+        showToast('Please fill in all required fields');
+        return;
+    }
     
     console.log('New record data prepared:', newData);
     
@@ -382,6 +417,50 @@ document.addEventListener('DOMContentLoaded', () => {
         }, { passive: false });
     });
 });
+
+// Delete record from Supabase
+async function deleteRecord(id) {
+    try {
+        const { error } = await supabase
+            .from('csv_data_january')
+            .delete()
+            .eq('id', id);
+
+        if (error) {
+            console.error('Delete error:', error);
+            throw new Error(error.message);
+        }
+
+        return true;
+    } catch (error) {
+        console.error('Error in deleteRecord:', error);
+        throw error;
+    }
+}
+
+// Handle delete button click
+async function handleDelete(id) {
+    if (!confirm('Are you sure you want to delete this record? This cannot be undone.')) {
+        return;
+    }
+
+    try {
+        await deleteRecord(id);
+        showToast('Record deleted successfully');
+        
+        // Refresh the search results
+        const searchTerm = document.getElementById('searchInput').value.trim();
+        if (searchTerm) {
+            const results = await searchRecords(searchTerm);
+            displayResults(results);
+        } else {
+            // If no search term, clear the results
+            document.getElementById('searchResults').innerHTML = '';
+        }
+    } catch (error) {
+        showToast(`Error deleting record: ${error.message}`);
+    }
+}
 
 // Test database connection and log details
 (async () => {
