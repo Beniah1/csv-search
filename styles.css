@@ -30,7 +30,11 @@ body {
 .container {
   max-width: 800px;
   margin: 0 auto;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.4));
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1),
+    rgba(255, 255, 255, 0.4)
+  );
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -659,7 +663,6 @@ button:hover {
   .search-section,
   .results-section,
   .instructions {
-    
     padding: 15px;
     margin-bottom: 15px;
   }
@@ -721,6 +724,67 @@ button:hover {
 
   .attendance-status {
     padding: 5px 10px;
+  }
+}
+
+/* Modal Styles Update */
+@media (max-width: 480px) {
+  .modal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+  }
+
+  .modal-content {
+    position: relative;
+    width: 95%;
+    height: auto;
+    max-height: 85vh;
+    margin: auto;
+    padding: 20px;
+    border-radius: 15px;
+    background: #ffffff;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    overflow-y: auto;
+  }
+
+  /* Contained close button */
+  .close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 36px;
+    height: 36px;
+    font-size: 20px;
+    background: linear-gradient(145deg, #45a049, #357d39);
+    z-index: 1;
+  }
+
+  /* Contained buttons at bottom */
+  .form-buttons {
+    position: sticky;
+    bottom: -20px;
+    left: 0;
+    right: 0;
+    padding: 15px;
+    margin: 20px -20px -20px;
+    background: #ffffff;
+    border-top: 1px solid #eee;
+    border-radius: 0 0 15px 15px;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+  }
+
+  .form-group {
+    margin-bottom: 15px;
+  }
+
+  /* Adjust padding for content */
+  #editForm,
+  #createForm {
+    padding-bottom: 60px;
   }
 }
 
