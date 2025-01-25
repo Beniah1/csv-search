@@ -20,7 +20,7 @@ function showToast(message) {
 async function searchRecords(searchTerm) {
     console.log('Searching for:', searchTerm);
     const { data, error } = await supabase
-        .from('csv_data')
+        .from('csv_data_january')
         .select('*')
         .or(`full_name.ilike.%${searchTerm}%,gender.ilike.%${searchTerm}%,phone_number.ilike.%${searchTerm}%`)
         .order('full_name');
@@ -51,6 +51,8 @@ function openEditModal(record) {
     document.getElementById('edit12th').value = record.attendance_12th || '';
     document.getElementById('edit19th').value = record.attendance_19th || '';
     document.getElementById('edit26th').value = record.attendance_26th || '';
+    document.getElementById('editAge').value = record.age || '';
+    document.getElementById('editCurrentLevel').value = record.current_level || '';
     
     modal.style.display = 'block';
     document.body.style.overflow = 'hidden'; // Prevent background scrolling
@@ -71,7 +73,7 @@ async function updateRecord(id, data) {
     try {
         // First verify the record exists
         const { data: existing, error: fetchError } = await supabase
-            .from('csv_data')
+            .from('csv_data_january')
             .select('*')
             .eq('id', id)
             .single();
@@ -89,7 +91,7 @@ async function updateRecord(id, data) {
 
         // Perform the update
         const { data: result, error: updateError } = await supabase
-            .from('csv_data')
+            .from('csv_data_january')
             .update({
                 full_name: data.full_name,
                 gender: data.gender,
@@ -97,7 +99,9 @@ async function updateRecord(id, data) {
                 attendance_5th: data.attendance_5th,
                 attendance_12th: data.attendance_12th,
                 attendance_19th: data.attendance_19th,
-                attendance_26th: data.attendance_26th
+                attendance_26th: data.attendance_26th,
+                age: data.age,
+                current_level: data.current_level
             })
             .eq('id', id)
             .select();
@@ -138,6 +142,8 @@ function displayResults(results) {
             <h3>${record.full_name}</h3>
             <p><strong>Gender:</strong> ${record.gender}</p>
             <p><strong>Phone:</strong> ${record.phone_number}</p>
+            <p><strong>Age:</strong> ${record.age || 'Not Set'}</p>
+            <p><strong>Current Level:</strong> ${record.current_level || 'Not Set'}</p>
             <p><strong>Attendance:</strong></p>
             <ul>
                 <li>5th: <span class="attendance-status ${record.attendance_5th || ''}">${record.attendance_5th || 'Not Set'}</span></li>
@@ -176,7 +182,9 @@ document.getElementById('editForm').addEventListener('submit', async (e) => {
         attendance_5th: document.getElementById('edit5th').value,
         attendance_12th: document.getElementById('edit12th').value,
         attendance_19th: document.getElementById('edit19th').value,
-        attendance_26th: document.getElementById('edit26th').value
+        attendance_26th: document.getElementById('edit26th').value,
+        age: document.getElementById('editAge').value,
+        current_level: document.getElementById('editCurrentLevel').value
     };
     
     console.log('Update data prepared:', updateData);
@@ -254,7 +262,7 @@ async function createRecord(data) {
     
     try {
         const { data: result, error } = await supabase
-            .from('csv_data')
+            .from('csv_data_january')
             .insert(data)
             .select();
 
@@ -286,6 +294,8 @@ function openCreateModal() {
     document.getElementById('new12th').value = '';
     document.getElementById('new19th').value = '';
     document.getElementById('new26th').value = '';
+    document.getElementById('newAge').value = '';
+    document.getElementById('newCurrentLevel').value = '';
 }
 
 function closeCreateModal() {
@@ -310,7 +320,9 @@ document.getElementById('createForm').addEventListener('submit', async (e) => {
         attendance_5th: document.getElementById('new5th').value,
         attendance_12th: document.getElementById('new12th').value,
         attendance_19th: document.getElementById('new19th').value,
-        attendance_26th: document.getElementById('new26th').value
+        attendance_26th: document.getElementById('new26th').value,
+        age: document.getElementById('newAge').value,
+        current_level: document.getElementById('newCurrentLevel').value
     };
     
     console.log('New record data prepared:', newData);
@@ -375,7 +387,7 @@ document.addEventListener('DOMContentLoaded', () => {
 (async () => {
     try {
         const { data, error } = await supabase
-            .from('csv_data')
+            .from('csv_data_january')
             .select('*')
             .limit(1);
             
