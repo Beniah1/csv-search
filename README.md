@@ -1,52 +1,45 @@
-# CSV Search App
+# 🔍 TMHT Data Search Tool
 
-A simple web application that allows users to upload CSV files and search through the data. The app works directly in the browser and requires no backend server.
+A modern web application featuring a sleek glass-morphism design for CSV file management.
 
-## Features
+## ✨ Features
 
-- Upload and parse CSV files
-- Search through CSV data
-- Responsive design
-- Works offline
-- Free to host and use
+- 📤 Upload and parse CSV files
+- 🔎 Search through CSV data
+- 💎 Modern glass-morphism UI design
+- 📱 Responsive layout with blur effects
+- ✏️ Edit data directly in the browser
+- 🌐 Works offline
+- 💫 Gradient animations
+- 🎯 Smooth transitions
 
-## How to Host on GitHub Pages (Free Hosting)
+## 🎨 UI Components
 
-1. Create a GitHub account if you don't have one at https://github.com/signup
-2. Create a new repository at https://github.com/new
-3. Name your repository (e.g., `csv-search`)
-4. Make it Public
-5. Don't initialize with any files
-6. After creating the repository, run these commands in your terminal (replace `yourusername` with your GitHub username):
+- 🌟 Glass effect container with blur backdrop
+- 🎆 Animated gradient background
+- ⚡ Semi-transparent elements
+- 🎯 Modern shadow effects
+- 📱 Responsive design for all devices
 
-```bash
-git init
-git add .
-git commit -m "Initial commit"
-git branch -M main
-git remote add origin https://github.com/yourusername/csv-search.git
-git push -u origin main
-```
+## 🚀 Hosting Guide (GitHub Pages)
 
-7. Go to your repository's settings
-8. Scroll down to "GitHub Pages" section
-9. Under "Source", select "main" branch
-10. Click Save
+### Prerequisites
+- GitHub account
+- Git installed on your computer
+- Your project files ready
 
-Your site will be available at: `https://yourusername.github.io/csv-search`
+### Step-by-Step Deployment
+1. **Create Repository**
+   - Go to https://github.com/new
+   - Name: `csv-search`
+   - Set to Public
+   - Don't initialize with files
 
-## Local Development
-
-Simply open `index.html` in your web browser to run the application locally.
-
-## File Format
-
-The CSV file should have headers in the first row. You can download the sample.csv file from the application to see the expected format.
-
-## Data Storage
-
-The application uses the browser's localStorage to store the CSV data. This means:
-- Data persists even after closing the browser
-- Each user has their own private data storage
-- Data can be cleared by clearing browser data
-- No server storage costs
+2. **Push Your Code**
+   ```bash
+   git init
+   git add .
+   git commit -m "Initial commit"
+   git branch -M main
+   git remote add origin https://github.com/yourusername/csv-search.git
+   git push -u origin main
