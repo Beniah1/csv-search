@@ -43,6 +43,9 @@ function openEditModal(record) {
     currentRecord = record;
     const modal = document.getElementById('editModal');
     
+    // Store modal state
+    sessionStorage.setItem('editModalOpen', 'true');
+    
     // Populate form fields with correct column names
     document.getElementById('editFullName').value = record.full_name;
     document.getElementById('editGender').value = record.gender;
@@ -64,6 +67,8 @@ function closeEditModal() {
     modal.style.display = 'none';
     document.body.style.overflow = ''; // Restore scrolling
     currentRecord = null;
+    // Clear modal state
+    sessionStorage.removeItem('editModalOpen');
 }
 
 // Update record in Supabase
@@ -310,6 +315,10 @@ async function createRecord(data) {
 // Modal functions for create
 function openCreateModal() {
     const modal = document.getElementById('createModal');
+    
+    // Store modal state
+    sessionStorage.setItem('createModalOpen', 'true');
+    
     modal.style.display = 'block';
     document.body.style.overflow = 'hidden'; // Prevent background scrolling
     showToast('Creating new record...');
@@ -330,6 +339,8 @@ function closeCreateModal() {
     const modal = document.getElementById('createModal');
     modal.style.display = 'none';
     document.body.style.overflow = ''; // Restore scrolling
+    // Clear modal state
+    sessionStorage.removeItem('createModalOpen');
 }
 
 // Handle create form submission
@@ -479,3 +490,16 @@ async function handleDelete(id) {
             `<p>Database Error: ${error.message}</p>`;
     }
 })();
+
+// Add this near the beginning of your file, after the Supabase initialization
+document.addEventListener('DOMContentLoaded', () => {
+    // Clear any stored modal states on page load
+    sessionStorage.removeItem('editModalOpen');
+    sessionStorage.removeItem('createModalOpen');
+    
+    // Ensure modals are hidden
+    document.getElementById('editModal').style.display = 'none';
+    document.getElementById('createModal').style.display = 'none';
+    
+    // ...rest of your DOMContentLoaded code...
+});
