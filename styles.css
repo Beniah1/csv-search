@@ -5,15 +5,9 @@
 }
 
 @keyframes gradientAnimation {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 body {
@@ -23,21 +17,17 @@ body {
   background-size: 400% 400%;
   animation: gradientAnimation 15s ease infinite;
   margin: 0;
-  padding: 20px;
+  padding: 10px;
   min-height: 100vh;
   overflow-y: auto;
-  -webkit-overflow-scrolling: touch; /* for smoother scrolling on iOS */
+  -webkit-overflow-scrolling: touch;
 }
 
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.1),
-    rgba(255, 255, 255, 0.4)
-  );
-  padding: 20px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.4));
+  padding: 15px;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   overflow-y: auto;
@@ -46,21 +36,22 @@ body {
 h1 {
   text-align: center;
   color: #ffffff;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
+  font-size: 1.8em;
 }
 
 h2 {
   color: #444;
   margin-bottom: 15px;
-  font-size: 1.2em;
+  font-size: 1.4em;
 }
 
-.instructions {
-  background-color: #f8f9fa;
-  padding: 20px;
-  margin-bottom: 30px;
+.instructions, .upload-section, .search-section, .results-section {
+  background-color: #fff;
+  padding: 15px;
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
   border-radius: 4px;
-  border: 1px solid #e9ecef;
 }
 
 .instructions ol {
@@ -86,34 +77,25 @@ h2 {
   text-decoration: underline;
 }
 
-.upload-section,
-.search-section,
-.results-section {
-  margin-bottom: 30px;
-  padding: 20px;
-  background-color: #fff;
-
-  border: 1px solid #ddd;
-  border-radius: 4px;
-}
-
-input[type="file"],
-input[type="text"] {
+input[type="file"], input[type="text"] {
   width: 100%;
   padding: 10px;
   margin-bottom: 10px;
   border: 1px solid #ddd;
   border-radius: 4px;
+  font-size: 16px; /* Prevents iOS zoom */
 }
 
 button {
   background-color: #4caf50;
   color: white;
-  padding: 10px 20px;
+  padding: 12px 20px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   font-size: 16px;
+  width: 100%;
+  margin-bottom: 10px;
 }
 
 button:hover {
@@ -125,7 +107,7 @@ button:hover {
 }
 
 .result-item {
-  padding: 20px;
+  padding: 15px;
   border-bottom: 1px solid #ddd;
   margin-bottom: 10px;
   background-color: #fff;
@@ -192,12 +174,6 @@ button:hover {
   border-radius: 12px;
 }
 
-#searchResults p {
-  text-align: center;
-  color: #666;
-  padding: 20px;
-}
-
 .loading {
   text-align: center;
   padding: 20px;
@@ -210,22 +186,11 @@ button:hover {
 }
 
 @keyframes dots {
-  0%,
-  20% {
-    content: ".";
-  }
-  40% {
-    content: "..";
-  }
-  60% {
-    content: "...";
-  }
-  80% {
-    content: "....";
-  }
-  100% {
-    content: ".....";
-  }
+  0%, 20% { content: "."; }
+  40% { content: ".."; }
+  60% { content: "..."; }
+  80% { content: "...."; }
+  100% { content: "....."; }
 }
 
 /* Modal Styles */
@@ -238,250 +203,69 @@ button:hover {
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 1000;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .modal-content {
   position: relative;
   background-color: #fff;
   margin: 20px auto;
-  padding: 25px;
+  padding: 20px;
   border-radius: 8px;
+  width: 90%;
   max-width: 600px;
   max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .close-btn {
   position: absolute;
-  right: 15px;
-  top: 15px;
-  width: 35px;
-  height: 35px;
+  top: 10px;
+  right: 10px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   background: linear-gradient(145deg, #45a049, #357d39);
-  border: 2px solid #245326;
-  font-size: 22px;
+  border: none;
+  color: white;
+  font-size: 20px;
   line-height: 1;
-  padding: 0;
-  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #ffffff;
-  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  transition: all 0.3s ease;
 }
 
 .close-btn:hover {
   background: linear-gradient(145deg, #357d39, #245326);
-  color: #ffffff;
   transform: scale(1.05);
 }
 
-@media (max-width: 480px) {
-  .close-btn {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    width: 40px;
-    height: 40px;
-    font-size: 24px;
-    z-index: 1001;
-  }
-
-  .modal-content {
-    position: relative;
-    width: 100%;
-    min-height: 100%;
-    margin: 0;
-    border-radius: 0;
-    padding-top: 20px;
-  }
-
-  .close-btn {
-    position: fixed;
-    top: 10px;
-    right: 10px;
-    z-index: 1001;
-    background-color: white;
-  }
-}
-
-.form-group {
-  margin-bottom: 20px;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 5px;
-  color: #333;
-  font-weight: 500;
-}
-
-.form-group input,
-.form-group select {
-  width: 100%;
-  padding: 8px 12px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 16px;
-}
-
-.attendance-inputs {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 15px;
-  margin-top: 10px;
-}
-
-.attendance-inputs div {
-  margin-bottom: 10px;
-}
-
-.attendance-inputs label {
-  font-weight: normal;
-  color: #666;
+.close-btn:active {
+  transform: scale(0.95);
 }
 
 .form-buttons {
+  position: sticky;
+  bottom: 0;
+  background: #fff;
+  padding: 15px 0;
+  margin: 20px -20px -20px -20px;
+  border-top: 1px solid #eee;
   display: flex;
+  justify-content: space-between;
   gap: 10px;
-  margin-top: 20px;
+  padding: 15px 20px;
 }
 
-.add-btn {
-  background-color: #28a745;
-  margin-top: 15px;
-  width: 100%;
-  max-width: 200px;
-  display: block;
+.form-buttons button {
+  flex: 1;
+  min-height: 44px;
 }
 
-.save-btn {
-  background-color: #4caf50;
-}
-
-.cancel-btn {
-  background-color: #dc3545;
-}
-
-.button-group {
-  display: flex;
-  gap: 10px;
-  margin-top: 10px;
-}
-
-.edit-btn {
-  background-color: #007bff;
-  padding: 5px 15px;
-  font-size: 14px;
-}
-
-.delete-btn {
-  background-color: #dc3545;
-  padding: 5px 15px;
-  font-size: 14px;
-}
-
-.delete-btn:hover {
-  background-color: #c82333;
-}
-
-/* Success/Error Messages */
-.message {
-  padding: 10px 15px;
-  margin: 10px 0;
-  border-radius: 4px;
-  text-align: center;
-}
-
-.success {
-  background-color: #d4edda;
-  color: #155724;
-  border: 1px solid #c3e6cb;
-}
-
-.error {
-  background-color: #f8d7da;
-  color: #721c24;
-  border: 1px solid #f5c6cb;
-}
-
-/* Toast Notifications */
-.toast {
-  position: fixed;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: rgba(51, 51, 51, 0.9);
-  color: white;
-  padding: 12px 24px;
-  border-radius: 20px;
-  font-size: 14px;
-  z-index: 2000;
-  animation: fadeInOut 2s ease;
-}
-
-@keyframes fadeInOut {
-  0% {
-    opacity: 0;
-    transform: translate(-50%, 20px);
-  }
-  15% {
-    opacity: 1;
-    transform: translate(-50%, 0);
-  }
-  85% {
-    opacity: 1;
-    transform: translate(-50%, 0);
-  }
-  100% {
-    opacity: 0;
-    transform: translate(-50%, -20px);
-  }
-}
-
-/* Fixed Modal Position */
-.modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 1000;
-  display: none;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-}
-
-@media (max-width: 480px) {
-  .modal {
-    align-items: flex-start;
-    padding: 0;
-  }
-
-  .modal-content {
-    position: relative;
-    width: 100%;
-    min-height: 100%;
-    margin: 0;
-    border-radius: 0;
-    padding-top: 20px;
-  }
-
-  .close-btn {
-    position: fixed;
-    top: 10px;
-    right: 10px;
-    z-index: 1001;
-    background-color: white;
-  }
-}
-
-/* Tablet Styles */
+/* Responsive Adjustments */
 @media (max-width: 768px) {
   .container {
     width: 95%;
@@ -498,209 +282,15 @@ button:hover {
     margin: 20px auto;
   }
 
-  .add-btn {
-    max-width: none;
-    margin: 15px auto;
-  }
-
-  input[type="text"],
-  select,
-  button {
-    font-size: 16px; /* Prevents iOS zoom */
+  input[type="text"], select, button {
+    font-size: 16px;
     padding: 12px;
   }
 }
 
-/* Mobile Styles */
 @media (max-width: 480px) {
-  /* General text size improvements */
   body {
-    padding: 10px;
-    font-size: 16px;
-  }
-
-  h1 {
-    font-size: 1.8em;
-    margin-bottom: 20px;
-  }
-
-  h2 {
-    font-size: 1.4em;
-    margin-bottom: 15px;
-  }
-
-  /* Form and input improvements */
-  .form-group label {
-    font-size: 1.1em;
-    margin-bottom: 8px;
-  }
-
-  .form-group input,
-  .form-group select {
-    font-size: 16px;
-    padding: 12px;
-    height: 48px; /* Larger touch target */
-  }
-
-  /* Modal improvements */
-  .modal-content {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    margin: 0;
-    padding: 20px;
-    padding-top: 60px; /* Space for close button */
-    padding-bottom: 80px; /* Space for buttons */
-    border-radius: 0;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  /* Better positioned close button */
-  .close-btn {
-    position: fixed;
-    top: 15px;
-    right: 15px;
-    width: 44px;
-    height: 44px;
-    font-size: 24px;
-    z-index: 1002;
-    background: linear-gradient(145deg, #45a049, #357d39);
-  }
-
-  /* Fixed button container at bottom */
-  .form-buttons {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 15px;
-    background: #fff;
-    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-    z-index: 1001;
-    flex-direction: row;
-    gap: 10px;
-    margin: 0;
-  }
-
-  .form-buttons button {
-    flex: 1;
-    height: 48px;
-    font-size: 16px;
-    margin: 0;
-  }
-
-  /* Result items improvements */
-  .result-item {
-    padding: 15px;
-    margin-bottom: 15px;
-    font-size: 1.1em;
-  }
-
-  .result-item h3 {
-    font-size: 1.3em;
-  }
-
-  .result-item p {
-    font-size: 1.1em;
-    margin: 8px 0;
-  }
-
-  /* Attendance status improvements */
-  .attendance-status {
-    font-size: 1em;
-    padding: 6px 12px;
-  }
-
-  /* Search improvements */
-  #searchInput {
-    height: 48px;
-    font-size: 16px;
-    padding: 12px;
-  }
-
-  #searchBtn {
-    height: 48px;
-    font-size: 16px;
-  }
-
-  /* Button improvements */
-  button {
-    min-height: 48px;
-    font-size: 16px;
-  }
-
-  .edit-btn,
-  .delete-btn {
-    font-size: 16px;
-    padding: 10px 20px;
-  }
-
-  body {
-    padding: 10px;
-  }
-
-  .container {
-    padding: 10px;
-    margin: 0 10px;
-    border-radius: 20px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  }
-
-  .search-section,
-  .results-section,
-  .instructions {
-    padding: 15px;
-    margin-bottom: 15px;
-    border-radius: 15px;
-  }
-
-  .result-item {
-    padding: 15px;
-    margin-bottom: 15px;
-    border-radius: 12px;
-  }
-
-  .search-section,
-  .results-section,
-  .instructions {
-    padding: 15px;
-    margin-bottom: 15px;
-  }
-
-  button {
-    width: 100%;
-    padding: 15px;
-    margin-bottom: 10px;
-  }
-
-  .modal-content {
-    margin: 0;
-    padding: 15px;
-    height: 100%;
-    border-radius: 0;
-    max-height: 100vh;
-  }
-
-  .attendance-inputs {
-    grid-template-columns: 1fr;
-    gap: 10px;
-  }
-
-  .form-buttons {
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .result-item {
-    padding: 15px;
-    margin-bottom: 15px;
-  }
-
-  .result-item ul {
-    grid-template-columns: 1fr;
+    padding: 5px;
   }
 
   h1 {
@@ -711,122 +301,60 @@ button:hover {
     font-size: 1.2em;
   }
 
-  .instructions p {
-    font-size: 0.95em;
+  .instructions, .upload-section, .search-section, .results-section {
+    padding: 10px;
   }
 
-  .button-group {
-    flex-direction: column;
-    gap: 8px;
-    margin-top: 15px;
-  }
-
-  .form-group {
-    margin-bottom: 15px;
-  }
-
-  .attendance-status {
-    padding: 5px 10px;
-  }
-}
-
-/* Modal Styles Update */
-@media (max-width: 480px) {
-  .modal {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 15px;
-  }
-
-  .modal-content {
-    position: relative;
-    width: 95%;
-    height: auto;
-    max-height: 85vh;
-    margin: auto;
-    padding: 20px;
-    border-radius: 15px;
-    background: #ffffff;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-    overflow-y: auto;
-  }
-
-  /* Contained close button */
-  .close-btn {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    width: 36px;
-    height: 36px;
-    font-size: 20px;
-    background: linear-gradient(145deg, #45a049, #357d39);
-    z-index: 1;
-  }
-
-  /* Contained buttons at bottom */
-  .form-buttons {
-    position: sticky;
-    bottom: -20px;
-    left: 0;
-    right: 0;
-    padding: 15px;
-    margin: 20px -20px -20px;
-    background: #ffffff;
-    border-top: 1px solid #eee;
-    border-radius: 0 0 15px 15px;
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-  }
-
-  .form-group {
-    margin-bottom: 15px;
-  }
-
-  /* Adjust padding for content */
-  #editForm,
-  #createForm {
-    padding-bottom: 60px;
-  }
-}
-
-/* Large Screen Styles */
-@media (min-width: 1200px) {
-  .container {
-    max-width: 1000px;
+  .result-item {
+    padding: 10px;
   }
 
   .result-item ul {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: 1fr;
+  }
+
+  .modal-content {
+    margin: 0;
+    padding: 15px;
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+  }
+
+  .close-btn {
+    top: 5px;
+    right: 5px;
+    width: 30px;
+    height: 30px;
+    font-size: 18px;
+  }
+
+  .form-buttons {
+    flex-direction: column;
+    gap: 10px;
   }
 }
 
-/* Extra Small Screens */
 @media (max-width: 320px) {
   body {
     padding: 5px;
   }
+
   .container {
     padding: 5px;
     margin: 0 5px;
   }
+
   h1 {
     font-size: 1.3em;
   }
+
   h2 {
     font-size: 1.1em;
   }
-  .instructions p,
-  .result-item p,
-  button {
+
+  .instructions p, .result-item p, button {
     font-size: 0.9em;
   }
 }
 
-/* Extra Large Screens */
-@media (min-width: 1600px) {
-  .container {
-    max-width: 1400px;
-  }
-}
