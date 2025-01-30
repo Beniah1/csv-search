@@ -5,9 +5,15 @@
 }
 
 @keyframes gradientAnimation {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 body {
@@ -26,7 +32,11 @@ body {
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.4));
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1),
+    rgba(255, 255, 255, 0.4)
+  );
   padding: 15px;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -46,7 +56,10 @@ h2 {
   font-size: 1.4em;
 }
 
-.instructions, .upload-section, .search-section, .results-section {
+.instructions,
+.upload-section,
+.search-section,
+.results-section {
   background-color: #fff;
   padding: 15px;
   margin-bottom: 20px;
@@ -77,13 +90,25 @@ h2 {
   text-decoration: underline;
 }
 
-input[type="file"], input[type="text"] {
+input[type="file"],
+input[type="text"],
+input[type="number"],
+select {
   width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
+  padding: 12px;
+  margin-bottom: 15px;
   border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 16px; /* Prevents iOS zoom */
+  border-radius: 8px;
+  font-size: 16px;
+  background-color: #f8f9fa;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+input:focus,
+select:focus {
+  outline: none;
+  border-color: #4caf50;
+  box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
 }
 
 button {
@@ -186,11 +211,22 @@ button:hover {
 }
 
 @keyframes dots {
-  0%, 20% { content: "."; }
-  40% { content: ".."; }
-  60% { content: "..."; }
-  80% { content: "...."; }
-  100% { content: "....."; }
+  0%,
+  20% {
+    content: ".";
+  }
+  40% {
+    content: "..";
+  }
+  60% {
+    content: "...";
+  }
+  80% {
+    content: "....";
+  }
+  100% {
+    content: ".....";
+  }
 }
 
 /* Modal Styles */
@@ -210,13 +246,46 @@ button:hover {
 .modal-content {
   position: relative;
   background-color: #fff;
-  margin: 20px auto;
-  padding: 20px;
-  border-radius: 8px;
-  width: 90%;
+  margin: 15px auto;
+  padding: 25px;
+  border-radius: 12px;
+  width: 95%;
   max-width: 600px;
   max-height: 90vh;
   overflow-y: auto;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #2c3e50;
+}
+
+.attendance-inputs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 15px;
+  background-color: #f8f9fa;
+  padding: 15px;
+  border-radius: 8px;
+  margin-top: 10px;
+}
+
+.attendance-inputs > div {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.attendance-inputs label {
+  font-size: 14px;
+  margin-bottom: 4px;
 }
 
 .close-btn {
@@ -251,18 +320,19 @@ button:hover {
   position: sticky;
   bottom: 0;
   background: #fff;
-  padding: 15px 0;
-  margin: 20px -20px -20px -20px;
   border-top: 1px solid #eee;
+  padding: 20px;
+  margin: 20px -25px -25px -25px;
   display: flex;
-  justify-content: space-between;
-  gap: 10px;
-  padding: 15px 20px;
+  gap: 15px;
 }
 
 .form-buttons button {
   flex: 1;
-  min-height: 44px;
+  min-height: 56px;
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
 }
 
 /* Responsive Adjustments */
@@ -282,7 +352,9 @@ button:hover {
     margin: 20px auto;
   }
 
-  input[type="text"], select, button {
+  input[type="text"],
+  select,
+  button {
     font-size: 16px;
     padding: 12px;
   }
@@ -290,7 +362,7 @@ button:hover {
 
 @media (max-width: 480px) {
   body {
-    padding: 5px;
+    padding: 8px;
   }
 
   h1 {
@@ -301,37 +373,72 @@ button:hover {
     font-size: 1.2em;
   }
 
-  .instructions, .upload-section, .search-section, .results-section {
-    padding: 10px;
+  .instructions,
+  .upload-section,
+  .search-section,
+  .results-section {
+    padding: 15px;
   }
 
   .result-item {
-    padding: 10px;
+    padding: 15px;
   }
 
   .result-item ul {
     grid-template-columns: 1fr;
   }
 
+  .modal {
+    align-items: flex-end;
+    padding: 0;
+  }
+
   .modal-content {
     margin: 0;
-    padding: 15px;
+    padding: 20px;
     width: 100%;
-    height: 100%;
-    border-radius: 0;
+    min-height: 100%;
+    border-radius: 20px 20px 0 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .modal form {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
   }
 
   .close-btn {
-    top: 5px;
-    right: 5px;
-    width: 30px;
-    height: 30px;
-    font-size: 18px;
+    top: 15px;
+    right: 15px;
+    width: 36px;
+    height: 36px;
+    font-size: 20px;
   }
 
   .form-buttons {
-    flex-direction: column;
-    gap: 10px;
+    position: sticky;
+    bottom: 0;
+    background: #fff;
+    border-top: 1px solid #eee;
+    padding: 20px;
+    margin: 20px -20px -20px -20px;
+    display: flex;
+    gap: 15px;
+  }
+
+  .form-buttons button {
+    flex: 1;
+    min-height: 56px;
+    margin: 0;
+    font-size: 16px;
+    font-weight: 500;
+  }
+
+  .attendance-inputs {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
   }
 }
 
@@ -353,8 +460,9 @@ button:hover {
     font-size: 1.1em;
   }
 
-  .instructions p, .result-item p, button {
+  .instructions p,
+  .result-item p,
+  button {
     font-size: 0.9em;
   }
 }
-
