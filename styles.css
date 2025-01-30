@@ -609,3 +609,32 @@ button:hover {
     grid-template-columns: repeat(4, 1fr);
   }
 }
+
+/* Extra Small Screens */
+@media (max-width: 320px) {
+  body {
+    padding: 5px;
+  }
+  .container {
+    padding: 5px;
+    margin: 0 5px;
+  }
+  h1 {
+    font-size: 1.3em;
+  }
+  h2 {
+    font-size: 1.1em;
+  }
+  .instructions p,
+  .result-item p,
+  button {
+    font-size: 0.9em;
+  }
+}
+
+/* Extra Large Screens */
+@media (min-width: 1600px) {
+  .container {
+    max-width: 1400px;
+  }
+}
